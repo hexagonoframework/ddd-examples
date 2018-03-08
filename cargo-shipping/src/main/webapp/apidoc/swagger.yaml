@@ -1,0 +1,186 @@
+swagger: '2.0'
+info:
+  description: API for Bookmarking
+  version: '1.0'
+  title: Bookmark API
+basePath: /backend/api
+tags:
+- name: bookmark
+paths:
+  /bookmark/:
+    post:
+      tags:
+      - bookmark
+      summary: Create Bookmark
+      description: Create new bookmarks
+      operationId: create
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - in: body
+        name: bookmark_info
+        description: Bookmark Info to be created
+        required: true
+        schema:
+          $ref: '#/definitions/BookmarkInfo'
+      responses:
+        '201':
+          description: Successful operation. Returns generated bookmark ID
+          schema:
+            $ref: '#/definitions/BookmarkId'
+        '400':
+          description: Bad request
+          schema:
+            $ref: '#/definitions/ErrorResponseEntity'
+    get:
+      tags:
+      - bookmark
+      summary: Find bookmarks by name
+      description: Find bookmarks by name
+      operationId: findByName
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: name
+        in: query
+        description: Bookmark name
+        required: true
+        type: string
+      responses:
+        '200':
+          description: Returns a list of bookmarks
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Bookmark'
+        '400':
+          description: Bad request
+          schema:
+            $ref: '#/definitions/ErrorResponseEntity'
+        '404':
+          description: Not found
+          schema:
+            $ref: '#/definitions/ErrorResponseEntity'
+  /bookmark/{id}:
+    put:
+      tags:
+      - bookmark
+      summary: Update Bookmark
+      description: Update a bookmark
+      operationId: update
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: id
+        in: path
+        description: Bookmark ID
+        required: true
+        type: string
+      - in: body
+        name: bookmark_info
+        description: Bookmark info to be updated
+        required: true
+        schema:
+          $ref: '#/definitions/BookmarkInfo'
+      responses:
+        '200':
+          description: Successful operation
+        '400':
+          description: Bad request
+          schema:
+            $ref: '#/definitions/ErrorResponseEntity'
+        '404':
+          description: Not found
+          schema:
+            $ref: '#/definitions/ErrorResponseEntity'
+    delete:
+      tags:
+      - bookmark
+      summary: Delete Bookmark
+      description: Delete a bookmark
+      operationId: delete
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: id
+        in: path
+        description: Bookmark ID
+        required: true
+        type: string
+      responses:
+        '200':
+          description: Successful operation
+        '400':
+          description: Bad request
+          schema:
+            $ref: '#/definitions/ErrorResponseEntity'
+        '404':
+          description: Not found
+          schema:
+            $ref: '#/definitions/ErrorResponseEntity'
+    get:
+      tags:
+      - bookmark
+      summary: Get Bookmark by Id
+      description: Get a bookmark by Id
+      operationId: getById
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: id
+        in: path
+        description: Bookmark ID
+        required: true
+        type: string
+      responses:
+        '200':
+          description: Successful operation
+          schema:
+            $ref: '#/definitions/Bookmark'
+        '400':
+          description: Bad request
+          schema:
+            $ref: '#/definitions/ErrorResponseEntity'
+        '404':
+          description: Not found
+          schema:
+            $ref: '#/definitions/ErrorResponseEntity'
+definitions:
+  Bookmark:
+    type: object
+    properties:
+      id:
+        $ref: '#/definitions/BookmarkId'
+      name:
+        type: string
+      link:
+        type: string
+  BookmarkId:
+    type: object
+    properties:
+      value:
+        type: string
+  BookmarkInfo:
+    type: object
+    properties:
+      name:
+        type: string
+      link:
+        type: string
+  ErrorResponseEntity:
+    type: object
+    properties:
+      code:
+        type: string
+      message:
+        type: string
